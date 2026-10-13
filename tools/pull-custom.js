@@ -1,5 +1,5 @@
 // @ts-check
-/* eslint-disable @stylistic/arrow-parens */
+/* eslint-disable @stylistic/arrow-parens, @stylistic/indent */
 
 const config = require("../config/config");
 const { google } = require("googleapis");
@@ -275,6 +275,9 @@ function readSpeciesRow(cellName, values, isFirstOfNum) {
 /*                                  Movesets                                  */
 /* -------------------------------------------------------------------------- */
 
+/** @type {Set<unknown>} */
+const MOVE_META_SHEETS = new Set(["Template", "Ideas"]);
+
 // TODO: Megas and such don't need their own learnset entries. Figure out how that works in Showdown.
 /**
  * @param {import("googleapis").sheets_v4.Sheets} sheets
@@ -285,54 +288,57 @@ async function readMovesetToLearnsetData(sheets) {
 
 	const response = await sheets.spreadsheets.get({
 		spreadsheetId: config.pullcustom.spreadsheets.movesets,
-		ranges: ["Movesets!A2:ZZ1000"],
 		includeGridData: true,
 	});
 
-	const rawRows = response.data.sheets?.[0].data?.[0]?.rowData;
-	if (!rawRows) throw new Error("No moveset rows.");
+	for (const sheet of response.data?.sheets ?? []) {
+		if (MOVE_META_SHEETS.has(sheet.properties?.title)) continue;
 
-	for (const rawRow of rawRows) {
-		if (!rawRow.values) continue;
+		const rawRows = sheet.data?.[0].rowData?.slice(1);
+		if (!rawRows) continue;
 
-		const monCellName = readNoteOrStringValue(rawRow.values[0]);
-		if (!monCellName) break;
+		for (const rawRow of rawRows) {
+			if (!rawRow || !rawRow.values) continue;
 
-		const moveName = readNoteOrStringValue(rawRow.values[1]);
-		if (!moveName) break;
+			const monCellName = readNoteOrStringValue(rawRow.values[0]);
+			if (!monCellName) break;
 
-		const moveId = toID(moveName);
-		const method = rawRow.values[2].userEnteredValue?.stringValue;
+			const moveName = readNoteOrStringValue(rawRow.values[1]);
+			if (!moveName) break;
 
-		/** @type {import("../sim/dex-species").MoveSource} */
-		let source;
+			const moveId = toID(moveName);
+			const method = rawRow.values[2].userEnteredValue?.stringValue;
 
-		// prettier-ignore
-		switch (method) {
-		case "Level": {
-			const level = rawRow.values[3].userEnteredValue?.numberValue;
-			if (!level) throw new Error(`Invalid level for move ${moveName}.`);
+			/** @type {import("../sim/dex-species").MoveSource} */
+			let source;
 
-			source = `${GEN}L${level}`;
-			break;
-		}
-		case "Evolve": {
-			source = "9L1";
-			break;
-		}
-		default: {
-			throw new Error(`Invalid learn method ${method} for move ${moveName}.`);
-		}
-		}
+			// prettier-ignore
+			switch (method) {
+      case "Level": {
+        const level = rawRow.values[3].userEnteredValue?.numberValue;
+        if (!level) throw new Error(`Invalid level for move ${moveName}.`);
 
-		const learnset = cellNameToLearnset.get(monCellName);
-		if (learnset) {
-			learnset.learnset ??= {};
-			learnset.learnset[moveId] = [source];
-		} else {
-			cellNameToLearnset.set(monCellName, {
-				learnset: { [moveId]: [source] },
-			});
+        source = `${GEN}L${level}`;
+        break;
+      }
+      case "Evolve": {
+          source = "9L1";
+          break;
+      }
+      default: {
+        throw new Error(`Invalid learn method ${method} for move ${moveName}.`);
+      }
+      }
+
+			const learnset = cellNameToLearnset.get(monCellName);
+			if (learnset) {
+				learnset.learnset ??= {};
+				learnset.learnset[moveId] = [source];
+			} else {
+				cellNameToLearnset.set(monCellName, {
+					learnset: { [moveId]: [source] },
+				});
+			}
 		}
 	}
 
