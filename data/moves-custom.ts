@@ -122,4 +122,35 @@ export const MovesCustom: import("../sim/dex-moves").MoveDataTable = {
 			},
 		},
 	},
+
+	blackice: {
+		num: 2006,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Black Ice",
+		pp: 20,
+		priority: 0,
+		flags: { reflectable: 1, metronome: 1, mustpressure: 1 },
+		sideCondition: "blackice",
+		condition: {
+			// this is a side condition
+			onSideStart(side) {
+				this.add("-sidestart", side, "move: Black Ice");
+			},
+			onSwitchIn(pokemon) {
+				if (pokemon.hasItem("heavydutyboots")) return;
+				const typeMod = this.clampIntRange(
+					pokemon.runEffectiveness(this.dex.getActiveMove("blackice")),
+					-6,
+					6
+				);
+				this.damage((pokemon.maxhp * 2 ** typeMod) / 8);
+			},
+		},
+		target: "foeSide",
+		type: "Ice",
+		zMove: { boost: { def: 1 } },
+		contestType: "Cool",
+	},
 };
