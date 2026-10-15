@@ -476,6 +476,8 @@ export const Learnsets: import("../sim/dex-species").LearnsetDataTable = {
 		learnset: {
 			quickattack: ["9L1"],
 			playnice: ["9L1"],
+			thundershock: ["9L1"],
+			thunderwave: ["9L1"],
 			rockthrow: ["9L7"],
 			fakeout: ["9L9"],
 			rollout: ["9L12"],

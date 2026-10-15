@@ -18,7 +18,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
 		majeider: { tier: "OU", doublesTier: "DOU" },
 		majeiderf: { tier: "OU", doublesTier: "DOU" },
 		cryosect: { tier: "LC", doublesTier: "LC" },
-		cryosectrevealed: { tier: "OU", doublesTier: "DOU" },
+		cryosectrevealed: { tier: "LC", doublesTier: "LC" },
 		stalacmite: { tier: "OU", doublesTier: "DOU" },
 		stalacmiterevealed: { tier: "OU", doublesTier: "DOU" },
 		stalacmitemega: { tier: "OU", doublesTier: "DOU" },
