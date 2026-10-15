@@ -29,4 +29,11 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
 		pyrosect: { tier: "OU", doublesTier: "DOU" },
 		thermmite: { tier: "OU", doublesTier: "DOU" },
 		thermmitemega: { tier: "OU", doublesTier: "DOU" },
+		volar: { tier: "OU", doublesTier: "DOU" },
+		voletage: { tier: "OU", doublesTier: "DOU" },
+		voletorb: { tier: "OU", doublesTier: "DOU" },
+		voletorbmega: { tier: "OU", doublesTier: "DOU" },
+		bawr: { tier: "OU", doublesTier: "DOU" },
+		terribawr: { tier: "OU", doublesTier: "DOU" },
+		terribawrmega: { tier: "OU", doublesTier: "DOU" },
 	};

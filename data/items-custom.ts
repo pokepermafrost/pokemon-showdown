@@ -25,10 +25,30 @@ export const ItemsCustom: import("../sim/dex-items").ItemDataTable = {
 	thermmitite: {
 		name: "Thermmitite",
 		megaStone: { Thermmite: "Thermmite-Mega" },
-		itemUser: ["Plasmite"],
+		itemUser: ["Thermmite"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: 2003,
+	},
+
+	voletorbite: {
+		name: "Voletorbite",
+		megaStone: { Voletorb: "Voletorb-Mega" },
+		itemUser: ["Voletorb"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2004,
+	},
+
+	terribawrite: {
+		name: "Terribawrite",
+		megaStone: { Terribawr: "Terribawr-Mega" },
+		itemUser: ["Terribawr"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2005,
 	},
 };
