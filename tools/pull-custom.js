@@ -20,6 +20,7 @@ const NUM_OFFSET = 2000;
  * 	id: string,
  *  cellName: string;
  *  species: SpeciesData,
+ *  tier: string,
  * }} SpeciesRow
  * @typedef {{
  *  rows: SpeciesRow[];
@@ -54,7 +55,10 @@ const NUM_OFFSET = 2000;
 
 	for (const speciesRow of speciesRows.rows) {
 		dataPokedex[speciesRow.id] = speciesRow.species;
-		dataFormats[speciesRow.id] = { tier: "OU", doublesTier: "DOU" };
+		dataFormats[speciesRow.id] = {
+			tier: speciesRow.tier,
+			doublesTier: (speciesRow.tier === "LC" ? "" : "D") + speciesRow.tier,
+		};
 
 		const learnset = cellNamesToLearnsetData.get(speciesRow.cellName);
 		if (learnset) {
@@ -268,7 +272,9 @@ function readSpeciesRow(cellName, values, isFirstOfNum) {
 		Object.assign(species, mergeModifiers);
 	}
 
-	return { ok: true, row: { id, cellName, species } };
+	const tier = readNoteOrStringValue(values[33]) ?? "UU";
+
+	return { ok: true, row: { id, cellName, species, tier } };
 }
 
 /* -------------------------------------------------------------------------- */
