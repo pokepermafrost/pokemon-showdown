@@ -16,8 +16,7 @@ export const MovesCustom: import("../sim/dex-moves").MoveDataTable = {
 			metronome: 1,
 		},
 		onHit(target, source, move) {
-			// TODO: Reset the grass type effect on switching out?
-			if (target.getTypes().join() === "Grass" || !target.setType("Grass")) {
+			if (target.getTypes().includes("Grass") || !target.setType("Grass")) {
 				// Creeping Moss should animate even when it fails.
 				// Returning false would suppress the animation.
 				this.add("-fail", target);
