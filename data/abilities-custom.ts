@@ -46,12 +46,10 @@ export const AbilitiesCustom: import("../sim/dex-abilities").AbilityDataTable =
 					!target.isAlly(holder) ||
 					source === holder ||
 					!["normal", "any", "adjacentFoe"].includes(move.target) ||
-					(move.priority > 0.1 &&
-						source.hasAbility([
-							"armortail",
-							"queenlymajesty",
-							"dazzling",
-						]))
+					// prettier-ignore
+					move.priority > 0.1 &&
+					(source.hasAbility(["armortail", "queenlymajesty", "dazzling"]) ||
+						this.field.isTerrain("psychicterrain"))
 				) {
 					return;
 				}
