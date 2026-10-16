@@ -20,14 +20,14 @@ The column value will be ignored for repeat sections.
 export const Formats: import("../sim/dex-formats").FormatList = [
 	{ section: "Pokémon Permafrost" },
 	{
-		name: "[Gen 9] Permafrost Singles",
-		gameType: "singles",
+		name: "[Gen 9] Permafrost Doubles",
+		gameType: "doubles",
 		ruleset: ["Standard AG", "+CAP"],
 		mod: "permafrost",
 	},
 	{
-		name: "[Gen 9] Permafrost Doubles",
-		gameType: "doubles",
+		name: "[Gen 9] Permafrost Singles",
+		gameType: "singles",
 		ruleset: ["Standard AG", "+CAP"],
 		mod: "permafrost",
 	},

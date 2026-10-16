@@ -34,18 +34,31 @@ export const AbilitiesCustom: import("../sim/dex-abilities").AbilityDataTable =
 		},
 
 		castling: {
-			onFoeTryMove(target, source, move) {
-				// TODO: This doesn't work, it swaps positions but doesn't change the target.
-				// Also it sometimes doesn't trigger?
+			onAnyRedirectTarget(target, source, source2, move) {
+				const holder: Pokemon = this.effectState.target;
+
 				if (
 					this.gameType !== "doubles" ||
-					target.position === source.position
+					holder.m.castlingUsed ||
+					!holder.isActive ||
+					holder.fainted ||
+					target === holder ||
+					!target.isAlly(holder) ||
+					source === holder ||
+					!["normal", "any", "adjacentFoe"].includes(move.target)
 				) {
 					return;
 				}
 
-				const newPosition = source.position === 0 ? 1 : 0;
-				this.swapPosition(source, newPosition, "[from] ability: Castling");
+				holder.m.castlingUsed = true;
+				this.add("-activate", holder, "ability: Castling");
+				this.swapPosition(
+					holder,
+					target.position,
+					"[from] ability: Castling"
+				);
+
+				return holder;
 			},
 			flags: { breakable: 1 },
 			name: "Castling",

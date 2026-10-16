@@ -5,6 +5,12 @@ export const AbilitiesTextCustom: { [id: IDEntry]: AbilityText } = {
 		shortDesc:
 			"This Pokemon's Normal-type moves become Fighting type and have 1.2× power.",
 	},
+	castling: {
+		name: "Castling",
+		shortDesc:
+			"This Pokémon switches places to take a hit for its ally once per battle.",
+		activate: "  {POKEMON} castled to take the hit!",
+	},
 	detonate: {
 		name: "Detonate",
 		desc: "This Pokemon's Normal-type moves become Fire-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
