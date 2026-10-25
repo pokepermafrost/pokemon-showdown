@@ -282,7 +282,14 @@ function readSpeciesRow(cellName, values, isFirstOfNum) {
 /* -------------------------------------------------------------------------- */
 
 /** @type {Set<unknown>} */
-const MOVE_META_SHEETS = new Set(["Template", "Ideas"]);
+const MOVE_META_SHEETS = new Set([
+	"New",
+	"Changed",
+	"TMs",
+	"HMs",
+	"Moveset Ideas",
+	"Moveset Template",
+]);
 
 // TODO: Megas and such don't need their own learnset entries. Figure out how that works in Showdown.
 /**

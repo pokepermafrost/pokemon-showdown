@@ -35,4 +35,8 @@ export const MovesTextCustom: { [id: IDEntry]: MoveText } = {
 		end: "  The black ice around {TEAM} melted!",
 		damage: "  {POKEMON} slipped on the black ice!",
 	},
+	makeitsnow: {
+		name: "Make It Snow",
+		shortDesc: "Starts Snow. Lowers the user's Sp. Atk by 1. Hits foe(s).",
+	},
 };

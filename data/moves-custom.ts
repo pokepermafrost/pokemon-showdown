@@ -152,4 +152,24 @@ export const MovesCustom: import("../sim/dex-moves").MoveDataTable = {
 		zMove: { boost: { def: 1 } },
 		contestType: "Cool",
 	},
+
+	makeitsnow: {
+		num: 2007,
+		accuracy: 95,
+		basePower: 95,
+		category: "Special",
+		name: "Make It Snow",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		self: {
+			boosts: {
+				spa: -1,
+			},
+		},
+		weather: "snowscape",
+		target: "allAdjacentFoes",
+		type: "Flying",
+		contestType: "Beautiful",
+	},
 };
