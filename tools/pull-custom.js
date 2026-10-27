@@ -296,7 +296,8 @@ const MOVE_META_SHEETS = new Set([
  * @param {import("googleapis").sheets_v4.Sheets} sheets
  */
 async function readMovesetToLearnsetData(sheets) {
-	const cellNameToLearnset = new LearnsetMap();
+	/** @type {Map<string, import("../sim/dex-species").LearnsetData>} */
+	const learnsets = new Map();
 
 	const response = await sheets.spreadsheets.get({
 		spreadsheetId: config.pullcustom.spreadsheets.movesets,
@@ -305,6 +306,8 @@ async function readMovesetToLearnsetData(sheets) {
 
 	for (const sheet of response.data?.sheets ?? []) {
 		if (MOVE_META_SHEETS.has(sheet.properties?.title)) continue;
+
+		const lineLearnsets = new LineLearnsetMap();
 
 		const rawRows = sheet.data?.[0].rowData?.slice(1);
 		if (!rawRows) continue;
@@ -351,14 +354,18 @@ async function readMovesetToLearnsetData(sheets) {
         }
       }
 
-			cellNameToLearnset.add(monCellName, moveId, source);
+			lineLearnsets.add(monCellName, moveId, source);
+		}
+
+		for (const [key, value] of lineLearnsets.distributeAllAndFinish()) {
+			learnsets.set(key, value);
 		}
 	}
 
-	return cellNameToLearnset.distributeAllAndFinish();
+	return learnsets;
 }
 
-class LearnsetMap {
+class LineLearnsetMap {
 	/** @type {Map<string, import("../sim/dex-species").LearnsetData>} */
 	#map = new Map();
 
