@@ -30,7 +30,7 @@ const NUM_OFFSET = 2000;
  * }} SpeciesRowCollection
  */
 
-(async () => {
+async function main() {
 	const auth = new google.auth.OAuth2(
 		config.pullcustom.auth.clientId,
 		config.pullcustom.auth.clientSecret
@@ -92,7 +92,7 @@ const NUM_OFFSET = 2000;
 		writeFile(`${__dirname}/../data/learnsets.ts`, dataLearnsetsText),
 		writeFile(`${__dirname}/../data/formats-data.ts`, dataFormatsText),
 	]);
-})();
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   Species                                  */
@@ -296,8 +296,7 @@ const MOVE_META_SHEETS = new Set([
  * @param {import("googleapis").sheets_v4.Sheets} sheets
  */
 async function readMovesetToLearnsetData(sheets) {
-	/** @type {Map<string, import("../sim/dex-species").LearnsetData>} */
-	const cellNameToLearnset = new Map();
+	const cellNameToLearnset = new LearnsetMap();
 
 	const response = await sheets.spreadsheets.get({
 		spreadsheetId: config.pullcustom.spreadsheets.movesets,
@@ -327,35 +326,83 @@ async function readMovesetToLearnsetData(sheets) {
 
 			// prettier-ignore
 			switch (method) {
-      case "Level": {
-        const level = rawRow.values[3].userEnteredValue?.numberValue;
-        if (!level) throw new Error(`Invalid level for move ${moveName}.`);
+        case "Level": {
+          const level = rawRow.values[3].userEnteredValue?.numberValue;
+          if (!level) throw new Error(`Invalid level for move ${moveName}.`);
 
-        source = `${GEN}L${level}`;
-        break;
-      }
-      case "Evolve": {
-          source = "9L1";
+          source = `${GEN}L${level}`;
           break;
-      }
-      default: {
-        throw new Error(`Invalid learn method ${method} for move ${moveName}.`);
-      }
+        }
+        case "Evolve": {
+            source = "9L1";
+            break;
+        }
+        case 'TM':
+        case 'HM': {
+          source = '9M';
+          break;
+        }
+        case 'Tutor': {
+          source = '9T';
+          break;
+        }
+        default: {
+          throw new Error(`Invalid learn method ${method} for move ${moveName}.`);
+        }
       }
 
-			const learnset = cellNameToLearnset.get(monCellName);
-			if (learnset) {
-				learnset.learnset ??= {};
-				learnset.learnset[moveId] = [source];
-			} else {
-				cellNameToLearnset.set(monCellName, {
-					learnset: { [moveId]: [source] },
-				});
-			}
+			cellNameToLearnset.add(monCellName, moveId, source);
 		}
 	}
 
-	return cellNameToLearnset;
+	return cellNameToLearnset.distributeAllAndFinish();
+}
+
+class LearnsetMap {
+	/** @type {Map<string, import("../sim/dex-species").LearnsetData>} */
+	#map = new Map();
+
+	/**
+	 * @param {string} cellName
+	 * @param {string} moveId
+	 * @param {import("../sim/dex-species").MoveSource} source
+	 */
+	add(cellName, moveId, source) {
+		const entry = this.#map.get(cellName);
+		if (entry) {
+			entry.learnset ??= {};
+			if (entry.learnset[moveId]) {
+				entry.learnset[moveId].push(source);
+			} else {
+				entry.learnset[moveId] = [source];
+			}
+		} else {
+			this.#map.set(cellName, { learnset: { [moveId]: [source] } });
+		}
+	}
+
+	/**
+	 *
+	 * @returns {ReadonlyMap<string, import("../sim/dex-species").LearnsetData>}
+	 */
+	distributeAllAndFinish() {
+		const allEntry = this.#map.get("All");
+		if (!allEntry) return this.#map;
+
+		this.#map.delete("All");
+
+		for (const cellName of this.#map.keys()) {
+			for (const [moveId, sources] of Object.entries(
+				allEntry.learnset ?? {}
+			)) {
+				for (const source of sources) {
+					this.add(cellName, moveId, source);
+				}
+			}
+		}
+
+		return this.#map;
+	}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -368,3 +415,9 @@ async function readMovesetToLearnsetData(sheets) {
 function readNoteOrStringValue(cell) {
 	return cell.note || cell.userEnteredValue?.stringValue;
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                     Run                                    */
+/* -------------------------------------------------------------------------- */
+
+main();
