@@ -112,9 +112,11 @@ export const AbilitiesCustom: import("../sim/dex-abilities").AbilityDataTable =
 					"ingrain",
 					"aquaring",
 					"strengthsap",
+					"plasmaeater",
 				];
 				if (heals.includes(effect.id)) {
-					return this.chainModify([5324, 4096]);
+					this.chainModify([4915, 4096]);
+					target.addVolatile("charge");
 				}
 			},
 			flags: {},
@@ -200,7 +202,7 @@ export const AbilitiesCustom: import("../sim/dex-abilities").AbilityDataTable =
 					}
 
 					this.damage(
-						pokemon.baseMaxhp / 8,
+						pokemon.baseMaxhp / 4,
 						pokemon,
 						pokemon,
 						this.dex.species.get(newSpecies)

@@ -2404,7 +2404,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	liquidooze: {
 		onSourceTryHeal(damage, target, source, effect) {
 			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
-			const canOoze = ['drain', 'leechseed', 'strengthsap'];
+			const canOoze = ['drain', 'leechseed', 'strengthsap', 'plasmaeater'];
 			if (canOoze.includes(effect.id)) {
 				this.damage(damage);
 				return 0;

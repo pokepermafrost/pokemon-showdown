@@ -20,7 +20,8 @@ export const AbilitiesTextCustom: { [id: IDEntry]: AbilityText } = {
 	bloodbattery: {
 		name: "Blood Battery",
 		shortDesc:
-			"This Pokémon gains 1.3× HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+			"This Pokémon gains the Charge effect and 1.2× HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+		start: "  {MOVE} charged {POKEMON} with power!",
 	},
 	icyambush: {
 		name: "Icy Ambush",
