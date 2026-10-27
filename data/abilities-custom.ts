@@ -235,4 +235,39 @@ export const AbilitiesCustom: import("../sim/dex-abilities").AbilityDataTable =
 			rating: 3,
 			num: 2005,
 		},
+
+		carburization: {
+			onTryHit(target, source, move) {
+				if (target !== source && move.type === "Fire") {
+					if (!this.boost({ def: 1 })) {
+						this.add("-immune", target, "[from] ability: Carburization");
+					}
+					return null;
+				}
+			},
+			onAnyRedirectTarget(target, source, source2, move) {
+				if (move.type !== "Fire" || move.flags["pledgecombo"]) return;
+				// prettier-ignore
+				const redirectTarget = ["randomNormal", "adjacentFoe"].includes(
+					move.target
+				) ? "normal" : move.target;
+				if (
+					this.validTarget(this.effectState.target, source, redirectTarget)
+				) {
+					if (move.smartTarget) move.smartTarget = false;
+					if (this.effectState.target !== target) {
+						this.add(
+							"-activate",
+							this.effectState.target,
+							"ability: Carburization"
+						);
+					}
+					return this.effectState.target;
+				}
+			},
+			flags: { breakable: 1 },
+			name: "Carburization",
+			rating: 3,
+			num: 114,
+		},
 	};
