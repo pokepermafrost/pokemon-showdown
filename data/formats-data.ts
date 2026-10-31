@@ -38,7 +38,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
 		terribawrmega: { tier: "Uber", doublesTier: "DUber" },
 		baberry: { tier: "LC", doublesTier: "LC" },
 		overkrone: { tier: "OU", doublesTier: "DOU" },
-		pebboal: { tier: "UU", doublesTier: "DUU" },
+		pebboal: { tier: "LC", doublesTier: "LC" },
 		geoggernaut: { tier: "UU", doublesTier: "DUU" },
-		kullwark: { tier: "UU", doublesTier: "DUU" },
+		kullwark: { tier: "OU", doublesTier: "DOU" },
 	};

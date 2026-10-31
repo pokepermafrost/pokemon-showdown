@@ -456,7 +456,7 @@ export const Pokedex: import("../sim/dex-species").SpeciesDataTable = {
 		baseStats: { hp: 55, atk: 55, def: 75, spa: 25, spd: 25, spe: 45 },
 		heightm: 0.5,
 		weightkg: 20,
-		eggGroups: ["Mineral", "Human-Like"],
+		eggGroups: ["Mineral"],
 	},
 	geoggernaut: {
 		num: 2031,
